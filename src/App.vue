@@ -4,4 +4,10 @@
   </div>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+#app {
+  width: 200px;
+  height: 200px;
+  background: blue;
+}
+</style>

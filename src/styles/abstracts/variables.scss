@@ -1,0 +1,33 @@
+////////////////////////////////////////////////////////////////////////////////
+// COLORS
+////////////////////////////////////////////////////////////////////////////////
+
+$gallery: #ececec;
+$alto: #d9d9d9;
+$gray: #888888;
+$dove-gray: #666666;
+$lemon-gras: #999a90;
+$tundora: #454545;
+$ming: #3c7d82;
+$caribbean-green: #00dbb1;
+$french-pass: #c6fdf8;
+$aqua-island: #9fdad4;
+$smalt-blue: #488588;
+$turquoise-blue: #74e8cf;
+
+////////////////////////////////////////////////////////////////////////////////
+// ABSTRACT
+////////////////////////////////////////////////////////////////////////////////
+
+%flex-cc {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+%flex-col-cc {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
