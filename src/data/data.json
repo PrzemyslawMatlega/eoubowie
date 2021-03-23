@@ -1,0 +1,12 @@
+{
+    "price": 28,
+    "currency": "zł",
+    "rating": 4.5,
+    "votes": 123,
+    "date_from": "",
+    "date_to": "",
+    "unavailable_dates": [
+        "29-03-2021",
+        "30-03-2021"
+    ]
+}

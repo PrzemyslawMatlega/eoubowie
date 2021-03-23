@@ -1,19 +1,12 @@
-<template>
-  <div class="home">
-    <div :class="$style.raz"></div>
-  </div>
-</template>
-
 <script>
+import BookingForm from '../components/BookingForm'
+import fakeData from '../data/data.json'
 export default {
-  name: 'Home'
+  name: 'Home',
+  functional: true,
+  render: function (createElement) {
+    console.log(fakeData)
+    return createElement(BookingForm, { props: { ...fakeData } })
+  }
 }
 </script>
-
-<style lang="scss" module>
-.raz {
-  width: 100px;
-  height: 100px;
-  background: $alto;
-}
-</style>

@@ -6,8 +6,8 @@
 
 <style lang="scss">
 #app {
-  width: 200px;
-  height: 200px;
-  background: blue;
+  // @extend %flex-cc;
+  width: 100%;
+  padding: 20rem;
 }
 </style>
