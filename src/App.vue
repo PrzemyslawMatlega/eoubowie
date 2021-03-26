@@ -6,7 +6,6 @@
 
 <style lang="scss">
 #app {
-  // @extend %flex-cc;
   width: 100%;
   padding: 20rem;
 }
