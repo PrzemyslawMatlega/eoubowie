@@ -35,6 +35,7 @@
 
 <script>
 export default {
+  name: 'AppStars',
   props: {
     rating: {
       type: Number,
@@ -44,13 +45,13 @@ export default {
   computed: {
     getClasses() {
       const roundedRatingBase = Math.round(this.rating * 2) / 2
-      let roundedRatring = roundedRatingBase
+      let roundedRating = roundedRatingBase
       const classArr = []
       for (let i = 0; i < Math.floor(roundedRatingBase); i++) {
         classArr.push('fullStar')
-        roundedRatring = --roundedRatring
+        roundedRating = --roundedRating
       }
-      if (roundedRatring === 0.5) classArr.push('halfStar')
+      if (roundedRating === 0.5) classArr.push('halfStar')
       const arrLenght = classArr.length
       if (arrLenght < 5) {
         for (let i = 0; i < 5 - arrLenght; i++) {

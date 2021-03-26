@@ -38,6 +38,8 @@ export default {
 
 <style lang="scss" module>
 .formInfo {
+  --star-color-full: var(--smalt-blue);
+  --star-color-empty: var(--alto);
   background: transparent;
   width: 100%;
 }

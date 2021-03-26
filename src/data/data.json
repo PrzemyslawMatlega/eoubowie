@@ -3,9 +3,9 @@
     "currency": "zł",
     "rating": 3.5,
     "votes": 123,
-    "date_from": "",
-    "date_to": "",
-    "unavailable_dates": [
+    "dateFrom": "",
+    "dateTo": "",
+    "unavailableDates": [
         "29-03-2021",
         "30-03-2021"
     ]

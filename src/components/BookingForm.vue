@@ -2,7 +2,7 @@
   <div :class="$style.bookingForm">
     <div :class="$style.wrapper">
       <div :class="$style.formInfoWrapper">
-        <FormInfo
+        <BookingFormInfo
           :price="price"
           :currency="currency"
           :rating="rating"
@@ -10,15 +10,25 @@
           :class="$style.bookingFormInfo"
         />
       </div>
+      <div :class="$style.datesHeading">Dates</div>
+      <div :class="$style.datePickerWrapper">
+        <DatePicker
+          :dateFrom="dateFrom"
+          :dateTo="dateTo"
+          :unavailableDates="unavailableDates"
+        />
+      </div>
     </div>
   </div>
 </template>
 <script>
-import FormInfo from './FormInfo'
+import BookingFormInfo from './BookingFormInfo'
+import DatePicker from './DatePicker'
 export default {
   name: 'BookingForm',
   components: {
-    FormInfo
+    BookingFormInfo,
+    DatePicker
   },
   props: {
     price: {
@@ -37,15 +47,15 @@ export default {
       type: Number,
       default: 0
     },
-    date_from: {
+    dateFrom: {
       type: String,
       default: ''
     },
-    date_to: {
+    dateTo: {
       type: String,
       default: ''
     },
-    unavailable_dates: {
+    unavailableDates: {
       type: Array,
       default: () => []
     }
@@ -70,8 +80,17 @@ export default {
   padding-bottom: 2.3rem;
   border-bottom: 0.1rem solid var(--alto);
 }
-.bookingFormInfo {
-  --star-color-full: var(--smalt-blue);
-  --star-color-empty: var(--alto);
+.datesHeading {
+  line-height: 1;
+  font-size: 1.3rem;
+  font-weight: var(--font-bold);
+  color: var(--dove-gray);
+  padding-bottom: 1rem;
+}
+.datePickerWrapper {
+  width: 100%;
+  border: 0.1rem solid var(--alto);
+  padding: 0.7rem 1rem;
+  border-radius: 0.3rem;
 }
 </style>
