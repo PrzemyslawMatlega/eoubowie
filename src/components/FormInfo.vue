@@ -1,8 +1,11 @@
 <template>
   <div :class="$style.formInfo">
-    <span :class="$style.price">{{ price }} {{ currency }}</span>
+    <div :class="$style.price">{{ price }} {{ currency }}</div>
     <div :class="$style.rating">
       <AppStars :rating="rating" />
+      <span :class="$style.votes">
+        {{ votes }}
+      </span>
     </div>
   </div>
 </template>
@@ -28,10 +31,6 @@ export default {
     votes: {
       type: Number,
       default: 0
-    },
-    cmpClass: {
-      type: String,
-      default: ''
     }
   }
 }
@@ -39,10 +38,25 @@ export default {
 
 <style lang="scss" module>
 .formInfo {
-  background: #fff;
+  background: transparent;
+  width: 100%;
+}
+.price {
+  padding-bottom: 1rem;
+  font-size: 2.4rem;
+  line-height: 1;
+  font-weight: var(--font-bold);
+  color: var(--tundora);
 }
 .rating {
-  width: 200px;
-  height: 35px;
+  display: flex;
+  align-items: flex-start;
+}
+.votes {
+  line-height: 1;
+  font-size: 1.2rem;
+  font-weight: var(--font-bold);
+  color: var(--dove-gray);
+  padding-left: 0.4rem;
 }
 </style>

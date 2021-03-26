@@ -1,13 +1,15 @@
 <template>
   <div :class="$style.bookingForm">
     <div :class="$style.wrapper">
-      <FormInfo
-        :price="price"
-        :currency="currency"
-        :rating="rating"
-        :votes="votes"
-        :class="$style.bookingFormInfo"
-      />
+      <div :class="$style.formInfoWrapper">
+        <FormInfo
+          :price="price"
+          :currency="currency"
+          :rating="rating"
+          :votes="votes"
+          :class="$style.bookingFormInfo"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -61,10 +63,15 @@ export default {
   height: 400px;
   border: 0.1rem solid var(--alto);
   border-radius: 0.3rem;
+  padding: 2.5rem;
+}
+.formInfoWrapper {
+  margin-bottom: 2.3rem;
+  padding-bottom: 2.3rem;
+  border-bottom: 0.1rem solid var(--alto);
 }
 .bookingFormInfo {
   --star-color-full: var(--smalt-blue);
   --star-color-empty: var(--alto);
-  background: white;
 }
 </style>
