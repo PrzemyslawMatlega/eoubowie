@@ -1,15 +1,56 @@
 <template>
   <div :class="$style.navbar">
-    <div @click="$emit('prevMonth')">PREV</div>
+    <div :class="$style.arrowWrapper">
+      <transition name="quick">
+        <div
+          v-if="prevDisable"
+          @click="$emit('prevMonth')"
+          :class="$style.arrow"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 492 492">
+            <defs />
+            <path
+              d="M198.608 246.104L382.664 62.04c5.068-5.056 7.856-11.816 7.856-19.024 0-7.212-2.788-13.968-7.856-19.032l-16.128-16.12C361.476 2.792 354.712 0 347.504 0s-13.964 2.792-19.028 7.864L109.328 227.008c-5.084 5.08-7.868 11.868-7.848 19.084-.02 7.248 2.76 14.028 7.848 19.112l218.944 218.932c5.064 5.072 11.82 7.864 19.032 7.864 7.208 0 13.964-2.792 19.032-7.864l16.124-16.12c10.492-10.492 10.492-27.572 0-38.06L198.608 246.104z"
+            />
+          </svg>
+        </div>
+      </transition>
+    </div>
     <div :class="$style.date">
       <slot></slot>
     </div>
-    <div @click="$emit('nextMonth')">NEXT</div>
+    <div :class="$style.arrowWrapper">
+      <transition name="quick">
+        <div
+          v-if="nextDisable"
+          @click="$emit('nextMonth')"
+          :class="[$style.arrow, $style.arrowRevers]"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 492 492">
+            <defs />
+            <path
+              d="M198.608 246.104L382.664 62.04c5.068-5.056 7.856-11.816 7.856-19.024 0-7.212-2.788-13.968-7.856-19.032l-16.128-16.12C361.476 2.792 354.712 0 347.504 0s-13.964 2.792-19.028 7.864L109.328 227.008c-5.084 5.08-7.868 11.868-7.848 19.084-.02 7.248 2.76 14.028 7.848 19.112l218.944 218.932c5.064 5.072 11.82 7.864 19.032 7.864 7.208 0 13.964-2.792 19.032-7.864l16.124-16.12c10.492-10.492 10.492-27.572 0-38.06L198.608 246.104z"
+            />
+          </svg>
+        </div>
+      </transition>
+    </div>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  props: {
+    prevDisable: {
+      type: Boolean,
+      required: true
+    },
+    nextDisable: {
+      type: Boolean,
+      required: true
+    }
+  }
+}
 </script>
 <style lang="scss" module>
 .navbar {
@@ -26,5 +67,29 @@ export default {}
   font-size: 2.4rem;
   line-height: 1;
   color: #fff;
+  user-select: none;
+}
+.arrowWrapper {
+  min-width: 3.8rem;
+}
+.arrow {
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  transition: all 0.2s ease;
+  user-select: none;
+  svg {
+    height: 1.8rem;
+  }
+  &:hover {
+    transform: translateX(-0.2rem);
+  }
+}
+.arrowRevers {
+  svg {
+    transform: rotate(180deg);
+  }
+  &:hover {
+    transform: translateX(0.2rem);
+  }
 }
 </style>

@@ -117,5 +117,6 @@ export default {
   font-size: 1.4rem;
   font-weight: var(--font-semi-bold);
   color: var(--silver);
+  user-select: none;
 }
 </style>

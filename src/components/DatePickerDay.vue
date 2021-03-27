@@ -41,6 +41,7 @@ export default {
   font-size: 1.5rem;
   font-weight: var(--font-bold);
   color: var(--alto);
+  user-select: none;
 }
 .dayCurrentMonth {
   color: var(--lemon-gras);

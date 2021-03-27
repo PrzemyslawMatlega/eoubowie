@@ -1,9 +1,14 @@
 <template>
   <div :class="$style.calendar">
-    <DatePickerNav @prevMonth="prevMonth" @nextMonth="nextMonth"
-      >{{ currentMonth.getMonth() | convertMonth }}
-      {{ currentMonth.getFullYear() }}</DatePickerNav
+    <DatePickerNav
+      @prevMonth="prevMonth"
+      @nextMonth="nextMonth"
+      :prevDisable="getCurrentMonthIndex !== 0"
+      :nextDisable="getCurrentMonthIndex !== this.getRange.length - 1"
     >
+      {{ currentMonth.getMonth() | convertMonth }}
+      {{ currentMonth.getFullYear() }}
+    </DatePickerNav>
     <transition name="quick" mode="out-in">
       <DatePickerMonth
         :key="currentMonth.getTime()"
@@ -57,7 +62,7 @@ export default {
       }
       const monthQty = monthDiff(
         firstMonth,
-        new Date(parseInt(lastMonthArr[1]), parseInt(lastMonthArr[0]) - 1)
+        new Date(parseInt(lastMonthArr[1]), parseInt(lastMonthArr[0]))
       )
 
       for (let i = 0; i < monthQty; i++) {
@@ -66,18 +71,27 @@ export default {
       }
 
       return monthArr
+    },
+    getCurrentMonthIndex() {
+      return this.getRange
+        .map(el => el.toDateString())
+        .indexOf(new Date(this.currentMonth.setDate(1)).toDateString())
     }
   },
   methods: {
     prevMonth() {
-      this.currentMonth = new Date(
-        this.currentMonth.setMonth(this.currentMonth.getMonth() - 1, 1)
-      )
+      if (this.getCurrentMonthIndex > 0) {
+        this.currentMonth = new Date(
+          this.currentMonth.setMonth(this.currentMonth.getMonth() - 1, 1)
+        )
+      }
     },
     nextMonth() {
-      this.currentMonth = new Date(
-        this.currentMonth.setMonth(this.currentMonth.getMonth() + 1, 1)
-      )
+      if (this.getCurrentMonthIndex !== this.getRange.length - 1) {
+        this.currentMonth = new Date(
+          this.currentMonth.setMonth(this.currentMonth.getMonth() + 1, 1)
+        )
+      }
     }
   },
   filters: {
@@ -105,5 +119,7 @@ export default {
 <style lang="scss" module>
 .calendar {
   width: 100%;
+  background: #fff;
+  //   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 </style>
