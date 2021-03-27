@@ -48,15 +48,11 @@
 
 <script>
 import DatePickerCalendar from './DatePickerCalendar'
+import { EventBus } from '@/utils/eventBus'
 export default {
   name: 'DatePicker',
   components: {
     DatePickerCalendar
-  },
-  data() {
-    return {
-      editMode: ''
-    }
   },
   props: {
     dateFrom: {
@@ -75,6 +71,20 @@ export default {
       type: Object,
       required: true
     }
+  },
+  data() {
+    return {
+      editMode: ''
+    }
+  },
+  created() {
+    EventBus.$on('dayClicked', data => {
+      if (data.editMode === 'checkIn') {
+        this.editMode = 'checkOut'
+      } else {
+        // this.editMode = ''
+      }
+    })
   }
 }
 </script>

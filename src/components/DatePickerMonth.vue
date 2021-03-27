@@ -5,7 +5,7 @@
         {{ weekDay }}
       </div>
       <DatePickerDay
-        v-for="day in getDays"
+        v-for="(day, index) in getDays"
         :key="day.date.getTime()"
         :is-current-month="day.isCurrentMonth"
         :is-today="day.isToday"
@@ -13,6 +13,7 @@
         :is-date-from="day.isDateFrom"
         :is-date-to="day.isDateTo"
         :is-date-between="isDateBetween(day.date)"
+        :index="index"
         @click.native="dayClicked(day)"
       >
         {{ day.date.getDate() }}

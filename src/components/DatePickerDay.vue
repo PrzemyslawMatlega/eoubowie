@@ -11,6 +11,7 @@
         [$style.dayBetween]: isDateBetween
       }
     ]"
+    :style="{ transition: `${0.03 * index}s all ease` }"
   >
     <div :class="$style.inner">
       <slot></slot>
@@ -44,6 +45,10 @@ export default {
     isDateBetween: {
       type: Boolean,
       required: true
+    },
+    index: {
+      type: Number,
+      require: true
     }
   }
 }
