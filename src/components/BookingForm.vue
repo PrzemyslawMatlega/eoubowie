@@ -31,11 +31,6 @@ export default {
     BookingFormInfo,
     DatePicker
   },
-  // created() {
-  //   function validateDateRange(dateFrom, dateTo, unavailableDates) {
-  //     // @TODO
-  //   }
-  // },
   props: {
     price: {
       type: Number,
@@ -75,8 +70,60 @@ export default {
       formData: {
         dateFrom: '',
         dateTo: ''
-      }
+      },
+      dateRange: true
     }
+  },
+  created() {
+    function validateDateRange(from, to, unavailableDates) {
+      let isValid = true
+      if (from === '' || to === '') return isValid
+
+      const dateArr = [from, to].map(el => {
+        if (typeof el === 'string') {
+          const dateArr = el.split('-')
+          return new Date(
+            parseInt(dateArr[2]),
+            parseInt(dateArr[1]) - 1,
+            parseInt(dateArr[0])
+          )
+        } else return el
+      })
+
+      const unavailableArr = unavailableDates.map(el => {
+        if (typeof el === 'string') {
+          const dateArr = el.split('-')
+          return new Date(
+            parseInt(dateArr[2]),
+            parseInt(dateArr[1]) - 1,
+            parseInt(dateArr[0])
+          )
+        } else return el
+      })
+
+      function getDaysArr(start, end) {
+        let arr = []
+        for (
+          let dt = new Date(start);
+          dt <= end;
+          dt.setDate(dt.getDate() + 1)
+        ) {
+          arr.push(new Date(dt))
+        }
+        return arr
+      }
+
+      isValid = !getDaysArr(dateArr[0], dateArr[1]).some(day => {
+        return unavailableArr.some(el => el.getTime() === day.getTime())
+      })
+
+      return isValid
+    }
+    this.dateRange = validateDateRange(
+      this.dateFrom,
+      this.dateTo,
+      this.unavailableDates
+    )
   }
 }
 </script>
