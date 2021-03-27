@@ -2,12 +2,6 @@ html {
   box-sizing: border-box;
 }
 
-*,
-*:before,
-*:after {
-  box-sizing: inherit;
-}
-
 a {
   color: inherit;
   text-decoration: none;
@@ -37,10 +31,10 @@ ol {
 
 .quick-enter-active,
 .quick-leave-active {
-  transition: opacity 0.5s;
+  transition: opacity 0.2s;
 }
 
 .quick-enter,
 .quick-leave-to {
-  opacity: 0 !important;
+  opacity: 0.5;
 }

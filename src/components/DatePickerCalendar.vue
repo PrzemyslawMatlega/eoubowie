@@ -1,10 +1,16 @@
 <template>
   <div :class="$style.calendar">
-    <DatePickerNav>Mar 2017</DatePickerNav>
-    <DatePickerMonth
-      :current-month="currentMonth"
-      :unavailable-dates="unavailableDates"
-    />
+    <DatePickerNav @prevMonth="prevMonth" @nextMonth="nextMonth"
+      >{{ currentMonth.getMonth() | convertMonth }}
+      {{ currentMonth.getFullYear() }}</DatePickerNav
+    >
+    <transition name="quick" mode="out-in">
+      <DatePickerMonth
+        :key="currentMonth.getTime()"
+        :current-month="currentMonth"
+        :unavailable-dates="unavailableDates"
+      />
+    </transition>
   </div>
 </template>
 
@@ -17,12 +23,6 @@ export default {
     DatePickerMonth,
     DatePickerNav
   },
-
-  data() {
-    return {
-      currentMonth: new Date(new Date().setHours(0, 0, 0, 0))
-    }
-  },
   props: {
     calendarSetup: {
       type: Object,
@@ -31,6 +31,11 @@ export default {
     unavailableDates: {
       type: Array,
       default: () => []
+    }
+  },
+  data() {
+    return {
+      currentMonth: new Date(new Date().setHours(0, 0, 0, 0))
     }
   },
   computed: {
@@ -61,6 +66,37 @@ export default {
       }
 
       return monthArr
+    }
+  },
+  methods: {
+    prevMonth() {
+      this.currentMonth = new Date(
+        this.currentMonth.setMonth(this.currentMonth.getMonth() - 1, 1)
+      )
+    },
+    nextMonth() {
+      this.currentMonth = new Date(
+        this.currentMonth.setMonth(this.currentMonth.getMonth() + 1, 1)
+      )
+    }
+  },
+  filters: {
+    convertMonth(month) {
+      const monthNames = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December'
+      ]
+      return monthNames[month]
     }
   }
 }

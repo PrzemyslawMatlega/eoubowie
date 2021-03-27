@@ -8,5 +8,8 @@
 #app {
   width: 100%;
   padding: 20rem;
+  * {
+    box-sizing: border-box;
+  }
 }
 </style>

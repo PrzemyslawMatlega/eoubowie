@@ -4,19 +4,24 @@
       <div v-for="weekDay in weekDayArr" :key="weekDay" :class="$style.weekDay">
         {{ weekDay }}
       </div>
-      {{ getDays }}
-      {{ parseUnavailableDates }}
+      <DatePickerDay
+        v-for="day in getDays"
+        :key="day.date.getTime()"
+        :is-current-month="day.isCurrentMonth"
+        :is-today="day.isToday"
+        :is-unavailable="day.isUnavailable"
+      >
+        {{ day.date.getDate() }}
+      </DatePickerDay>
     </div>
   </div>
 </template>
 
 <script>
+import DatePickerDay from './DatePickerDay'
 export default {
-  data() {
-    return {
-      weekDayArr: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-      today: new Date(new Date().setHours(0, 0, 0, 0))
-    }
+  components: {
+    DatePickerDay
   },
   props: {
     currentMonth: {
@@ -28,9 +33,15 @@ export default {
       default: () => []
     }
   },
+  data() {
+    return {
+      weekDayArr: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+      today: new Date(new Date().setHours(0, 0, 0, 0))
+    }
+  },
   methods: {
     setDateAttr(date, isCurrentMonth = true) {
-      const dayObject = {
+      return {
         date,
         isCurrentMonth,
         isToday:
@@ -39,7 +50,6 @@ export default {
           el => el.toDateString() === date.toDateString()
         )
       }
-      return dayObject
     }
   },
   computed: {
@@ -89,9 +99,23 @@ export default {
 
 <style lang="scss" module>
 .month {
+  background: #fff;
 }
 .currentMonth {
 }
 .grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-auto-rows: auto;
+  justify-content: center;
+  row-gap: 1.5rem;
+  padding: 2.5rem 2rem;
+}
+.weekDay {
+  @extend %flex-cc;
+  padding-bottom: 0.5rem;
+  font-size: 1.4rem;
+  font-weight: var(--font-semi-bold);
+  color: var(--silver);
 }
 </style>

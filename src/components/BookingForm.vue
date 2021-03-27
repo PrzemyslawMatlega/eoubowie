@@ -36,14 +36,6 @@ export default {
   //     // @TODO
   //   }
   // },
-  data() {
-    return {
-      formData: {
-        dateFrom: '',
-        dateTo: ''
-      }
-    }
-  },
   props: {
     price: {
       type: Number,
@@ -77,6 +69,14 @@ export default {
       type: Object,
       required: true
     }
+  },
+  data() {
+    return {
+      formData: {
+        dateFrom: '',
+        dateTo: ''
+      }
+    }
   }
 }
 </script>
@@ -88,7 +88,7 @@ export default {
 }
 .wrapper {
   width: 100%;
-  height: 400px;
+  height: 700px;
   border: 0.1rem solid var(--alto);
   border-radius: 0.3rem;
   padding: 2.5rem 2.7rem;
