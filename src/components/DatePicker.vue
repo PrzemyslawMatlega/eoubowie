@@ -12,7 +12,10 @@
     </svg>
     <div :class="$style.dateTab">Check out</div>
     <div :class="$style.calendarWrapper">
-      <DatePickerCalendar :calendar-setup="calendarSetup" />
+      <DatePickerCalendar
+        :calendar-setup="calendarSetup"
+        :unavailable-dates="unavailableDates"
+      />
     </div>
   </div>
 </template>

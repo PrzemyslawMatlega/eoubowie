@@ -1,7 +1,10 @@
 <template>
   <div :class="$style.calendar">
     <DatePickerNav>Mar 2017</DatePickerNav>
-    <DatePickerMonth :current-date="currentDate" />
+    <DatePickerMonth
+      :current-month="currentMonth"
+      :unavailable-dates="unavailableDates"
+    />
   </div>
 </template>
 
@@ -14,15 +17,20 @@ export default {
     DatePickerMonth,
     DatePickerNav
   },
+
   data() {
     return {
-      currentDate: new Date()
+      currentMonth: new Date(new Date().setHours(0, 0, 0, 0))
     }
   },
   props: {
     calendarSetup: {
       type: Object,
       required: true
+    },
+    unavailableDates: {
+      type: Array,
+      default: () => []
     }
   },
   computed: {
