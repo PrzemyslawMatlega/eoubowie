@@ -11,12 +11,19 @@
       />
     </svg>
     <div :class="$style.dateTab">Check out</div>
+    <div :class="$style.calendarWrapper">
+      <DatePickerCalendar :calendar-setup="calendarSetup" />
+    </div>
   </div>
 </template>
 
 <script>
+import DatePickerCalendar from './DatePickerCalendar'
 export default {
   name: 'DatePicker',
+  components: {
+    DatePickerCalendar
+  },
   props: {
     dateFrom: {
       type: String,
@@ -29,6 +36,10 @@ export default {
     unavailableDates: {
       type: Array,
       default: () => []
+    },
+    calendarSetup: {
+      type: Object,
+      required: true
     }
   }
 }
@@ -38,6 +49,7 @@ export default {
 .datePicker {
   display: flex;
   align-items: center;
+  position: relative;
 }
 .arrow {
   height: 1.5rem;
@@ -60,5 +72,10 @@ export default {
   &:hover {
     background: var(--alto);
   }
+}
+.calendarWrapper {
+  top: 4rem;
+  left: 0;
+  position: absolute;
 }
 </style>

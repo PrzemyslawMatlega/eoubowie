@@ -13,9 +13,10 @@
       <div :class="$style.datesHeading">Dates</div>
       <div :class="$style.datePickerWrapper">
         <DatePicker
-          :dateFrom="dateFrom"
-          :dateTo="dateTo"
-          :unavailableDates="unavailableDates"
+          :date-from="formData.dateFrom"
+          :date-to="formData.dateTo"
+          :unavailable-dates="unavailableDates"
+          :calendar-setup="calendarSetup"
         />
       </div>
     </div>
@@ -29,6 +30,19 @@ export default {
   components: {
     BookingFormInfo,
     DatePicker
+  },
+  // created() {
+  //   function validateDateRange(dateFrom, dateTo, unavailableDates) {
+  //     // @TODO
+  //   }
+  // },
+  data() {
+    return {
+      formData: {
+        dateFrom: '',
+        dateTo: ''
+      }
+    }
   },
   props: {
     price: {
@@ -58,14 +72,18 @@ export default {
     unavailableDates: {
       type: Array,
       default: () => []
+    },
+    calendarSetup: {
+      type: Object,
+      required: true
     }
   }
 }
 </script>
 <style lang="scss" module>
 .bookingForm {
-  width: 44rem;
-  padding: 1rem 1.5rem 7rem;
+  max-width: 50rem;
+  padding: 1.3rem 1.7rem 7rem;
   background: var(--gallery);
 }
 .wrapper {
@@ -73,7 +91,7 @@ export default {
   height: 400px;
   border: 0.1rem solid var(--alto);
   border-radius: 0.3rem;
-  padding: 2.5rem;
+  padding: 2.5rem 2.7rem;
 }
 .formInfoWrapper {
   margin-bottom: 2.3rem;
