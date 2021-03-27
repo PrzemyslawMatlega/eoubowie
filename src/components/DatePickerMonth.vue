@@ -12,6 +12,8 @@
         :is-unavailable="day.isUnavailable"
         :is-date-from="day.isDateFrom"
         :is-date-to="day.isDateTo"
+        :is-date-between="isDateBetween(day.date)"
+        @click.native="dayClicked(day)"
       >
         {{ day.date.getDate() }}
       </DatePickerDay>
@@ -21,6 +23,7 @@
 
 <script>
 import DatePickerDay from './DatePickerDay'
+import { EventBus } from '@/utils/eventBus'
 export default {
   components: {
     DatePickerDay
@@ -41,6 +44,10 @@ export default {
     dateTo: {
       type: String,
       default: ''
+    },
+    editMode: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -50,6 +57,10 @@ export default {
     }
   },
   methods: {
+    dayClicked({ date, isUnavailable }) {
+      if (isUnavailable) return
+      EventBus.$emit('dayClicked', { date, editMode: this.editMode })
+    },
     setDateAttr(date, isCurrentMonth = true) {
       return {
         date,
@@ -63,15 +74,34 @@ export default {
         isDateTo: this.compareDate(date, this.dateTo)
       }
     },
-    compareDate(firstDate, secondDate) {
-      if (secondDate === '') return false
-      const dateArr = secondDate.split('-')
-      const mySecondDate = new Date(
+    convertToDate(date) {
+      if (typeof date !== 'string') return date
+      const dateArr = date.split('-')
+      return new Date(
         parseInt(dateArr[2]),
         parseInt(dateArr[1]) - 1,
         parseInt(dateArr[0])
       )
-      return firstDate.getTime() === mySecondDate.getTime()
+    },
+    compareDate(firstDate, secondDate) {
+      if (secondDate === '') return false
+      return firstDate.getTime() === this.convertToDate(secondDate).getTime()
+    },
+    getDaysArr(start, end) {
+      let arr = []
+      for (let dt = new Date(start); dt <= end; dt.setDate(dt.getDate() + 1)) {
+        arr.push(new Date(dt))
+      }
+      return arr
+    },
+    isDateBetween(dateBetween) {
+      if (this.dateFrom === '' || this.dateTo === '') return false
+      return this.getDaysArr(
+        this.convertToDate(this.dateFrom),
+        this.convertToDate(this.dateTo)
+      ).some(el => {
+        return this.compareDate(dateBetween, el)
+      })
     }
   },
   computed: {

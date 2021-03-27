@@ -7,7 +7,8 @@
         [$style.dayToday]: isToday,
         [$style.dayUnavailable]: isUnavailable,
         [$style.dayFrom]: isDateFrom,
-        [$style.dayTo]: isDateTo
+        [$style.dayTo]: isDateTo,
+        [$style.dayBetween]: isDateBetween
       }
     ]"
   >
@@ -39,6 +40,10 @@ export default {
     isDateTo: {
       type: Boolean,
       required: true
+    },
+    isDateBetween: {
+      type: Boolean,
+      required: true
     }
   }
 }
@@ -52,6 +57,7 @@ export default {
   font-weight: var(--font-bold);
   color: var(--alto);
   user-select: none;
+  cursor: pointer;
 }
 .dayCurrentMonth {
   color: var(--lemon-gras);
@@ -68,11 +74,32 @@ export default {
 }
 .dayUnavailable {
   color: var(--alto);
+  cursor: not-allowed;
+}
+.dayFrom,
+.dayTo {
+  .inner {
+    @extend %flex-cc;
+    height: 4.5rem;
+    width: 4.5rem;
+    border: 0.2rem solid var(--caribbean-green);
+    background: var(--caribbean-green);
+    border-radius: 50%;
+    color: #fff;
+  }
+}
+.dayBetween {
+  color: var(--turquoise-blue);
+  background: var(--french-pass);
 }
 .dayFrom {
-  background: red;
+  background: linear-gradient(to left, var(--french-pass) 50%, transparent 50%);
 }
 .dayTo {
-  background: blue;
+  background: linear-gradient(
+    to right,
+    var(--french-pass) 50%,
+    transparent 50%
+  );
 }
 </style>

@@ -16,6 +16,7 @@
         :unavailable-dates="unavailableDates"
         :date-from="dateFrom"
         :date-to="dateTo"
+        :edit-mode="editMode"
       />
     </transition>
   </div>
@@ -46,6 +47,10 @@ export default {
     unavailableDates: {
       type: Array,
       default: () => []
+    },
+    editMode: {
+      type: String,
+      default: ''
     }
   },
   data() {

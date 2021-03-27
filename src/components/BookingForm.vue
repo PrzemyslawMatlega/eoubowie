@@ -25,12 +25,14 @@
 <script>
 import BookingFormInfo from './BookingFormInfo'
 import DatePicker from './DatePicker'
+import { EventBus } from '@/utils/eventBus'
 export default {
   name: 'BookingForm',
   components: {
     BookingFormInfo,
     DatePicker
   },
+
   props: {
     price: {
       type: Number,
@@ -122,6 +124,18 @@ export default {
       this.formData.dateFrom = this.dateFrom
       this.formData.dateTo = this.dateTo
     }
+
+    EventBus.$on('dayClicked', data => {
+      if (data.editMode === 'checkIn') {
+        this.formData.dateFrom = `${data.date.getDate()}-${
+          data.date.getMonth() + 1
+        }-${data.date.getFullYear()}`
+      } else {
+        this.formData.dateTo = `${data.date.getDate()}-${
+          data.date.getMonth() + 1
+        }-${data.date.getFullYear()}`
+      }
+    })
   }
 }
 </script>
