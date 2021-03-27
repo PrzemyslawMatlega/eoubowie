@@ -1,17 +1,23 @@
 <template>
   <div :class="$style.calendar">
-    <template v-for="singleDate in getRange">
-      <DatePickerMonth :key="singleDate.getTime()" :single-date="singleDate" />
-    </template>
+    <DatePickerNav>Mar 2017</DatePickerNav>
+    <DatePickerMonth :current-date="currentDate" />
   </div>
 </template>
 
 <script>
 import DatePickerMonth from './DatePickerMonth'
+import DatePickerNav from './DatePickerNav'
 export default {
   name: 'DatePickerCalendar',
   components: {
-    DatePickerMonth
+    DatePickerMonth,
+    DatePickerNav
+  },
+  data() {
+    return {
+      currentDate: new Date()
+    }
   },
   props: {
     calendarSetup: {
@@ -54,5 +60,6 @@ export default {
 
 <style lang="scss" module>
 .calendar {
+  width: 100%;
 }
 </style>

@@ -50,6 +50,7 @@ export default {
   display: flex;
   align-items: center;
   position: relative;
+  padding: 0.7rem 1rem;
 }
 .arrow {
   height: 1.5rem;
@@ -74,8 +75,9 @@ export default {
   }
 }
 .calendarWrapper {
-  top: 4rem;
+  top: 5rem;
   left: 0;
+  width: 100%;
   position: absolute;
 }
 </style>

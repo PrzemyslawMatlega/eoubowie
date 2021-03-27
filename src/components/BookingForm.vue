@@ -108,7 +108,6 @@ export default {
 .datePickerWrapper {
   width: 100%;
   border: 0.1rem solid var(--alto);
-  padding: 0.7rem 1rem;
   border-radius: 0.3rem;
 }
 </style>
