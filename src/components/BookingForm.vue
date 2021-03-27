@@ -70,8 +70,7 @@ export default {
       formData: {
         dateFrom: '',
         dateTo: ''
-      },
-      dateRange: true
+      }
     }
   },
   created() {
@@ -119,11 +118,10 @@ export default {
 
       return isValid
     }
-    this.dateRange = validateDateRange(
-      this.dateFrom,
-      this.dateTo,
-      this.unavailableDates
-    )
+    if (validateDateRange(this.dateFrom, this.dateTo, this.unavailableDates)) {
+      this.formData.dateFrom = this.dateFrom
+      this.formData.dateTo = this.dateTo
+    }
   }
 }
 </script>
