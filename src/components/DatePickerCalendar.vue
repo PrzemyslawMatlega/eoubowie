@@ -14,6 +14,8 @@
         :key="currentMonth.getTime()"
         :current-month="currentMonth"
         :unavailable-dates="unavailableDates"
+        :date-from="dateFrom"
+        :date-to="dateTo"
       />
     </transition>
   </div>
@@ -29,6 +31,14 @@ export default {
     DatePickerNav
   },
   props: {
+    dateFrom: {
+      type: String,
+      default: ''
+    },
+    dateTo: {
+      type: String,
+      default: ''
+    },
     calendarSetup: {
       type: Object,
       required: true

@@ -10,6 +10,8 @@
         :is-current-month="day.isCurrentMonth"
         :is-today="day.isToday"
         :is-unavailable="day.isUnavailable"
+        :is-date-from="day.isDateFrom"
+        :is-date-to="day.isDateTo"
       >
         {{ day.date.getDate() }}
       </DatePickerDay>
@@ -31,6 +33,14 @@ export default {
     unavailableDates: {
       type: Array,
       default: () => []
+    },
+    dateFrom: {
+      type: String,
+      default: ''
+    },
+    dateTo: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -48,8 +58,20 @@ export default {
           this.today.toDateString() === date.toDateString() ? true : false,
         isUnavailable: this.parseUnavailableDates.some(
           el => el.toDateString() === date.toDateString()
-        )
+        ),
+        isDateFrom: this.compareDate(date, this.dateFrom),
+        isDateTo: this.compareDate(date, this.dateTo)
       }
+    },
+    compareDate(firstDate, secondDate) {
+      if (secondDate === '') return false
+      const dateArr = secondDate.split('-')
+      const mySecondDate = new Date(
+        parseInt(dateArr[2]),
+        parseInt(dateArr[1]) - 1,
+        parseInt(dateArr[0])
+      )
+      return firstDate.getTime() === mySecondDate.getTime()
     }
   },
   computed: {

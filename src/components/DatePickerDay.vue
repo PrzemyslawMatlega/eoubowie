@@ -5,7 +5,9 @@
       {
         [$style.dayCurrentMonth]: isCurrentMonth,
         [$style.dayToday]: isToday,
-        [$style.dayUnavailable]: isUnavailable
+        [$style.dayUnavailable]: isUnavailable,
+        [$style.dayFrom]: isDateFrom,
+        [$style.dayTo]: isDateTo
       }
     ]"
   >
@@ -27,6 +29,14 @@ export default {
       required: true
     },
     isUnavailable: {
+      type: Boolean,
+      required: true
+    },
+    isDateFrom: {
+      type: Boolean,
+      required: true
+    },
+    isDateTo: {
       type: Boolean,
       required: true
     }
@@ -58,5 +68,11 @@ export default {
 }
 .dayUnavailable {
   color: var(--alto);
+}
+.dayFrom {
+  background: red;
+}
+.dayTo {
+  background: blue;
 }
 </style>
