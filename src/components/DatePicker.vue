@@ -9,7 +9,7 @@
       ]"
       @click="editMode = 'checkIn'"
     >
-      {{ dateFrom === '' ? 'Check in' : dateFrom }}
+      {{ dateFrom === null ? 'Check in' : dateFrom | parseToString }}
     </div>
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -29,7 +29,7 @@
       ]"
       @click="editMode = 'checkOut'"
     >
-      {{ dateTo === '' ? 'Check out' : dateTo }}
+      {{ dateTo === null ? 'Check out' : dateTo | parseToString }}
     </div>
     <div :class="$style.calendarWrapper">
       <transition name="quick">
@@ -56,12 +56,12 @@ export default {
   },
   props: {
     dateFrom: {
-      type: String,
-      default: ''
+      type: Date,
+      default: null
     },
     dateTo: {
-      type: String,
-      default: ''
+      type: Date,
+      default: null
     },
     unavailableDates: {
       type: Array,
@@ -75,6 +75,17 @@ export default {
   data() {
     return {
       editMode: ''
+    }
+  },
+  filters: {
+    parseToString(value) {
+      if (typeof value === 'string') return value
+      else {
+        return `${value.getDate()}-${String(value.getMonth() + 1).padStart(
+          2,
+          '0'
+        )}-${value.getFullYear()}`
+      }
     }
   },
   created() {

@@ -39,12 +39,12 @@ export default {
       default: () => []
     },
     dateFrom: {
-      type: String,
-      default: ''
+      type: Date,
+      default: null
     },
     dateTo: {
-      type: String,
-      default: ''
+      type: Date,
+      default: null
     },
     editMode: {
       type: String,
@@ -59,20 +59,39 @@ export default {
   },
   methods: {
     dayClicked({ date, isUnavailable }) {
-      if (isUnavailable) return
-      EventBus.$emit('dayClicked', { date, editMode: this.editMode })
+      let isValid = true
+      if (isUnavailable) {
+        isValid = false
+      }
+      // @TODO
+      // if (this.editMode === 'checkIn') {
+      //   this.parseUnavailableDates.some(el => {
+      //     return el.toDateString() <= date.toDateString()
+      //   })
+      //     ? (isValid = false)
+      //     : null
+      // }
+      // if (this.editMode === 'checkOut') {
+      //   this.parseUnavailableDates.some(el => {
+      //     return el.toDateString() > date.toDateString()
+      //   })
+      //     ? (isValid = false)
+      //     : null
+      // }
+      if (isValid) {
+        EventBus.$emit('dayClicked', { date, editMode: this.editMode })
+      }
     },
     setDateAttr(date, isCurrentMonth = true) {
       return {
         date,
         isCurrentMonth,
-        isToday:
-          this.today.toDateString() === date.toDateString() ? true : false,
-        isUnavailable: this.parseUnavailableDates.some(
-          el => el.toDateString() === date.toDateString()
+        isToday: this.compareDates(this.today, date),
+        isUnavailable: this.parseUnavailableDates.some(el =>
+          this.compareDates(el, date)
         ),
-        isDateFrom: this.compareDate(date, this.dateFrom),
-        isDateTo: this.compareDate(date, this.dateTo)
+        isDateFrom: this.compareDates(date, this.dateFrom),
+        isDateTo: this.compareDates(date, this.dateTo)
       }
     },
     convertToDate(date) {
@@ -84,9 +103,9 @@ export default {
         parseInt(dateArr[0])
       )
     },
-    compareDate(firstDate, secondDate) {
-      if (secondDate === '') return false
-      return firstDate.getTime() === this.convertToDate(secondDate).getTime()
+    compareDates(firstDate, secondDate) {
+      if (firstDate === null || secondDate === null) return false
+      return firstDate.toDateString() === secondDate.toDateString()
     },
     getDaysArr(start, end) {
       let arr = []
@@ -96,25 +115,15 @@ export default {
       return arr
     },
     isDateBetween(dateBetween) {
-      if (this.dateFrom === '' || this.dateTo === '') return false
-      return this.getDaysArr(
-        this.convertToDate(this.dateFrom),
-        this.convertToDate(this.dateTo)
-      ).some(el => {
-        return this.compareDate(dateBetween, el)
+      if (this.dateFrom === null || this.dateTo === null) return false
+      return this.getDaysArr(this.dateFrom, this.dateTo).some(el => {
+        return this.compareDates(dateBetween, el)
       })
     }
   },
   computed: {
     parseUnavailableDates() {
-      return this.unavailableDates.map(el => {
-        const dateArr = el.split('-')
-        return new Date(
-          parseInt(dateArr[2]),
-          parseInt(dateArr[1]) - 1,
-          parseInt(dateArr[0])
-        )
-      })
+      return this.unavailableDates.map(el => new Date(el))
     },
     getDays() {
       const days = []

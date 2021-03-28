@@ -3,14 +3,14 @@
     "currency": "zł",
     "rating": 3.5,
     "votes": 123,
-    "dateFrom": "23-03-2021",
-    "dateTo": "28-03-2021",
+    "dateFrom": "2021-03-21",
+    "dateTo": "2021-03-28",
     "unavailableDates": [
-        "29-03-2021",
-        "30-03-2021"
+        "2021-03-29",
+        "2021-03-30"
     ],
     "calendarSetup": {
-        "firstMonth": "06-2020",
-        "lastMonth": "12-2021"
+        "firstMonth": "2020-06-01",
+        "lastMonth": "2021-12-01"
     }
 }

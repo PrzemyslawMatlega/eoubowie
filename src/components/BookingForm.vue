@@ -70,8 +70,8 @@ export default {
   data() {
     return {
       formData: {
-        dateFrom: '',
-        dateTo: ''
+        dateFrom: null,
+        dateTo: null
       }
     }
   },
@@ -82,23 +82,13 @@ export default {
 
       const dateArr = [from, to].map(el => {
         if (typeof el === 'string') {
-          const dateArr = el.split('-')
-          return new Date(
-            parseInt(dateArr[2]),
-            parseInt(dateArr[1]) - 1,
-            parseInt(dateArr[0])
-          )
+          return new Date(el)
         } else return el
       })
 
       const unavailableArr = unavailableDates.map(el => {
         if (typeof el === 'string') {
-          const dateArr = el.split('-')
-          return new Date(
-            parseInt(dateArr[2]),
-            parseInt(dateArr[1]) - 1,
-            parseInt(dateArr[0])
-          )
+          return new Date(el)
         } else return el
       })
 
@@ -115,25 +105,23 @@ export default {
       }
 
       isValid = !getDaysArr(dateArr[0], dateArr[1]).some(day => {
-        return unavailableArr.some(el => el.getTime() === day.getTime())
+        return unavailableArr.some(
+          el => el.toDateString() === day.toDateString()
+        )
       })
 
       return isValid
     }
     if (validateDateRange(this.dateFrom, this.dateTo, this.unavailableDates)) {
-      this.formData.dateFrom = this.dateFrom
-      this.formData.dateTo = this.dateTo
+      this.formData.dateFrom = new Date(this.dateFrom)
+      this.formData.dateTo = new Date(this.dateTo)
     }
 
-    EventBus.$on('dayClicked', data => {
-      if (data.editMode === 'checkIn') {
-        this.formData.dateFrom = `${data.date.getDate()}-${
-          data.date.getMonth() + 1
-        }-${data.date.getFullYear()}`
+    EventBus.$on('dayClicked', payload => {
+      if (payload.editMode === 'checkIn') {
+        this.formData.dateFrom = payload.date
       } else {
-        this.formData.dateTo = `${data.date.getDate()}-${
-          data.date.getMonth() + 1
-        }-${data.date.getFullYear()}`
+        this.formData.dateTo = payload.date
       }
     })
   }

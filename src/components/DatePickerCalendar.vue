@@ -33,12 +33,12 @@ export default {
   },
   props: {
     dateFrom: {
-      type: String,
-      default: ''
+      type: Date,
+      default: null
     },
     dateTo: {
-      type: String,
-      default: ''
+      type: Date,
+      default: null
     },
     calendarSetup: {
       type: Object,
@@ -60,12 +60,11 @@ export default {
   },
   computed: {
     getRange() {
-      const firstMonthArr = this.calendarSetup.firstMonth.split('-')
-      const lastMonthArr = this.calendarSetup.lastMonth.split('-')
-      const firstMonth = new Date(
-        parseInt(firstMonthArr[1]),
-        parseInt(firstMonthArr[0]) - 1
-      )
+      const thisYear = new Date().getFullYear()
+      const {
+        firstMonth = `${thisYear}-01-01`,
+        lastMonth = `${thisYear}-12-01`
+      } = this.calendarSetup
       const monthArr = []
 
       function monthDiff(dateFrom, dateTo) {
@@ -75,10 +74,8 @@ export default {
           12 * (dateTo.getFullYear() - dateFrom.getFullYear())
         )
       }
-      const monthQty = monthDiff(
-        firstMonth,
-        new Date(parseInt(lastMonthArr[1]), parseInt(lastMonthArr[0]))
-      )
+
+      const monthQty = monthDiff(new Date(firstMonth), new Date(lastMonth)) + 1
 
       for (let i = 0; i < monthQty; i++) {
         const baseMonth = new Date(firstMonth.valueOf())
@@ -127,6 +124,11 @@ export default {
       ]
       return monthNames[month]
     }
+  },
+  created() {
+    if (this.getCurrentMonthIndex === -1) {
+      this.currentMonth = this.getRange[0]
+    }
   }
 }
 </script>
@@ -135,6 +137,6 @@ export default {
 .calendar {
   width: 100%;
   background: #fff;
-  //   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 </style>
