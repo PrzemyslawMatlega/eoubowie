@@ -15,7 +15,7 @@
         <DatePicker
           :date-from="formData.dateFrom"
           :date-to="formData.dateTo"
-          :locked-days="lockedDays"
+          :locked-days="convertlockedDays"
           :calendar-setup="calendarSetup"
         />
       </div>
@@ -26,18 +26,13 @@
 import BookingFormInfo from './BookingFormInfo'
 import DatePicker from './DatePicker'
 import { EventBus } from '@/utils/eventBus'
-import {
-  areDaysEqual,
-  convertToDateObject,
-  getDaysBetween
-} from '@/utils/dateFunctions'
+import { convertToDateObject, areDaysInRange } from '@/utils/dateFunctions'
 export default {
   name: 'BookingForm',
   components: {
     BookingFormInfo,
     DatePicker
   },
-
   props: {
     price: {
       type: Number,
@@ -80,30 +75,43 @@ export default {
       }
     }
   },
+  computed: {
+    convertlockedDays() {
+      return this.lockedDays.map(el => convertToDateObject(el))
+    }
+  },
   created() {
-    function validateDateRange(from, to, lockedDays) {
+    const initValidation = () => {
       let isValid = true
-      if (from === '' && to === '') return isValid
+      if (this.dateFrom === '' && this.dateTo === '') return isValid
 
-      const dateArr = [from, to].map(el => convertToDateObject(el))
-      const unavailableArr = lockedDays.map(el => convertToDateObject(el))
+      const dateArr = [this.dateFrom, this.dateTo].map(el =>
+        convertToDateObject(el)
+      )
 
-      isValid = !getDaysBetween(dateArr[0], dateArr[1]).some(day => {
-        return unavailableArr.some(el => areDaysEqual(el, day))
-      })
+      if (areDaysInRange(dateArr[0], dateArr[1], this.convertlockedDays)) {
+        isValid = false
+      }
 
       return isValid
     }
-    if (validateDateRange(this.dateFrom, this.dateTo, this.lockedDays)) {
-      this.formData.dateFrom = new Date(this.dateFrom)
-      this.formData.dateTo = new Date(this.dateTo)
+    if (initValidation()) {
+      this.formData.dateFrom =
+        this.dateFrom !== '' ? new Date(this.dateFrom) : null
+      this.formData.dateTo = this.dateTo !== '' ? new Date(this.dateTo) : null
     }
 
     EventBus.$on('dayClicked', payload => {
       if (payload.editMode === 'checkIn') {
         this.formData.dateFrom = payload.date
+        if (payload.lockedInRange) {
+          this.formData.dateTo = null
+        }
       } else {
         this.formData.dateTo = payload.date
+        if (payload.lockedInRange) {
+          this.formData.dateFrom = null
+        }
       }
     })
   }

@@ -28,7 +28,8 @@ import { EventBus } from '@/utils/eventBus'
 import {
   areDaysEqual,
   getDaysBetween,
-  convertToDateObject
+  isFirstDateEarlier,
+  areDaysInRange
 } from '@/utils/dateFunctions'
 export default {
   components: {
@@ -65,24 +66,71 @@ export default {
   methods: {
     dayClicked({ date, isUnavailable }) {
       let isValid = true
+
       if (isUnavailable) {
         isValid = false
       }
-      // @TODO
-      // if (this.editMode === 'checkIn') {
-      //   this.convertlockedDays.some(el => {
-      //     return el.toDateString() <= date.toDateString()
-      //   })
-      //     ? (isValid = false)
-      //     : null
-      // }
-      // if (this.editMode === 'checkOut') {
-      //   this.convertlockedDays.some(el => {
-      //     return el.toDateString() > date.toDateString()
-      //   })
-      //     ? (isValid = false)
-      //     : null
-      // }
+      //exclude today
+      if (isValid && areDaysEqual(date, this.today)) {
+        isValid = false
+      }
+      //exclude past days
+      if (isValid && isFirstDateEarlier(date, this.today)) {
+        isValid = false
+      }
+      // prevent picking days after dateTo
+      if (
+        isValid &&
+        this.editMode === 'checkIn' &&
+        this.dateTo !== null &&
+        !isFirstDateEarlier(date, this.dateTo)
+      ) {
+        isValid = false
+      }
+      // prevent picking days before dateFrom
+      if (
+        isValid &&
+        this.editMode === 'checkOut' &&
+        this.dateFrom !== null &&
+        isFirstDateEarlier(date, this.dateFrom)
+      ) {
+        isValid = false
+      }
+
+      // prevent picking days range with locked days
+      // and reset date
+      if (isValid) {
+        if (this.editMode === 'checkIn' && this.dateTo !== null) {
+          const lockedInRange = areDaysInRange(
+            date,
+            this.dateTo,
+            this.lockedDays
+          )
+          if (lockedInRange) {
+            EventBus.$emit('dayClicked', {
+              date,
+              editMode: this.editMode,
+              lockedInRange: lockedInRange
+            })
+          }
+        }
+        if (this.editMode === 'checkOut' && this.dateFrom !== null) {
+          const lockedInRange = areDaysInRange(
+            this.dateFrom,
+            date,
+            this.lockedDays
+          )
+
+          if (lockedInRange) {
+            EventBus.$emit('dayClicked', {
+              date,
+              editMode: this.editMode,
+              lockedInRange: lockedInRange
+            })
+          }
+        }
+      }
+
       if (isValid) {
         EventBus.$emit('dayClicked', { date, editMode: this.editMode })
       }
@@ -92,9 +140,7 @@ export default {
         date,
         isCurrentMonth,
         isToday: areDaysEqual(this.today, date),
-        isUnavailable: this.convertlockedDays.some(el =>
-          areDaysEqual(el, date)
-        ),
+        isUnavailable: this.lockedDays.some(el => areDaysEqual(el, date)),
         isDateFrom: areDaysEqual(date, this.dateFrom),
         isDateTo: areDaysEqual(date, this.dateTo)
       }
@@ -107,9 +153,6 @@ export default {
     }
   },
   computed: {
-    convertlockedDays() {
-      return this.lockedDays.map(el => convertToDateObject(el))
-    },
     getDays() {
       const days = []
       const getCurrentMonthDays = () => {

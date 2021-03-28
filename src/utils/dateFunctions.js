@@ -2,11 +2,22 @@ function areDaysEqual(firstDate, secondDate) {
   if (firstDate === null || secondDate === null) return false
   return firstDate.toDateString() === secondDate.toDateString()
 }
+function isFirstDateEarlier(firstDate, secondDate) {
+  const first = firstDate.setHours(0, 0, 0, 0)
+  const second = secondDate.setHours(0, 0, 0, 0)
+  return first < second
+}
 
 function convertToDateObject(value) {
   if (typeof value === 'string') {
     return new Date(value)
   } else return value
+}
+
+function areDaysInRange(rangeFrom, rangeTo, days) {
+  return getDaysBetween(rangeFrom, rangeTo).some(day => {
+    return days.some(el => areDaysEqual(el, day))
+  })
 }
 
 function getDaysBetween(dateFrom, dateTo) {
@@ -29,4 +40,11 @@ function getMonthDiff(dateFrom, dateTo) {
   )
 }
 
-export { areDaysEqual, convertToDateObject, getDaysBetween, getMonthDiff }
+export {
+  areDaysEqual,
+  convertToDateObject,
+  getDaysBetween,
+  getMonthDiff,
+  isFirstDateEarlier,
+  areDaysInRange
+}

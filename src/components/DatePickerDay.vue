@@ -11,7 +11,7 @@
         [$style.dayBetween]: isDateBetween
       }
     ]"
-    :style="{ transition: `${0.03 * index}s all ease` }"
+    :style="{ transition: `${0.02 * index}s all ease` }"
   >
     <div :class="$style.inner">
       <slot></slot>
@@ -92,6 +92,9 @@ export default {
     border-radius: 50%;
     color: #fff;
   }
+}
+.dayFrom.dayTo {
+  background: transparent;
 }
 .dayBetween {
   color: var(--turquoise-blue);
