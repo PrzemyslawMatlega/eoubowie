@@ -1,11 +1,12 @@
 <template>
   <div :class="$style.navbar">
-    <div :class="$style.arrowWrapper">
+    <div :class="$style.arrowWrapper" data-testid="prev-month-wrapper">
       <transition name="quick">
         <div
-          v-if="prevDisable"
+          v-if="prevEnable"
           @click="$emit('prevMonth')"
           :class="$style.arrow"
+          data-testid="prev-month-button"
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 492 492">
             <defs />
@@ -19,12 +20,13 @@
     <div :class="$style.date">
       <slot></slot>
     </div>
-    <div :class="$style.arrowWrapper">
+    <div :class="$style.arrowWrapper" data-testid="next-month-wrapper">
       <transition name="quick">
         <div
-          v-if="nextDisable"
+          v-if="nextEnable"
           @click="$emit('nextMonth')"
           :class="[$style.arrow, $style.arrowRevers]"
+          data-testid="next-month-button"
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 492 492">
             <defs />
@@ -41,11 +43,11 @@
 <script>
 export default {
   props: {
-    prevDisable: {
+    prevEnable: {
       type: Boolean,
       required: true
     },
-    nextDisable: {
+    nextEnable: {
       type: Boolean,
       required: true
     }

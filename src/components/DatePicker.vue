@@ -8,6 +8,7 @@
         }
       ]"
       @click="editMode = 'checkIn'"
+      data-testid="check-in"
     >
       {{ dateFrom === null ? 'Check in' : dateFrom | parseToString }}
     </div>
@@ -28,6 +29,7 @@
         }
       ]"
       @click="editMode = 'checkOut'"
+      data-testid="check-out"
     >
       {{ dateTo === null ? 'Check out' : dateTo | parseToString }}
     </div>
@@ -81,10 +83,9 @@ export default {
     parseToString(value) {
       if (typeof value === 'string') return value
       else {
-        return `${value.getDate()}-${String(value.getMonth() + 1).padStart(
-          2,
-          '0'
-        )}-${value.getFullYear()}`
+        return `${String(value.getDate()).padStart(2, '0')}-${String(
+          value.getMonth() + 1
+        ).padStart(2, '0')}-${value.getFullYear()}`
       }
     }
   },

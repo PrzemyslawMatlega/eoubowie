@@ -1,5 +1,6 @@
 <template>
   <div
+    data-testid="date-picker-calendar"
     :class="[
       $style.calendar,
       { [$style.calendarCheckIn]: editMode === 'checkIn' },
@@ -9,8 +10,8 @@
     <DatePickerNav
       @prevMonth="prevMonth"
       @nextMonth="nextMonth"
-      :prevDisable="getCurrentMonthIndex !== 0"
-      :nextDisable="getCurrentMonthIndex !== this.getRange.length - 1"
+      :prevEnable="getCurrentMonthIndex !== 0"
+      :nextEnable="getCurrentMonthIndex !== this.getRange.length - 1"
     >
       {{ currentMonth.getMonth() | convertMonth }}
       {{ currentMonth.getFullYear() }}
