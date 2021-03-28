@@ -13,7 +13,7 @@
       <DatePickerMonth
         :key="currentMonth.getTime()"
         :current-month="currentMonth"
-        :unavailable-dates="unavailableDates"
+        :locked-days="lockedDays"
         :date-from="dateFrom"
         :date-to="dateTo"
         :edit-mode="editMode"
@@ -25,6 +25,7 @@
 <script>
 import DatePickerMonth from './DatePickerMonth'
 import DatePickerNav from './DatePickerNav'
+import { getMonthDiff } from '@/utils/dateFunctions'
 export default {
   name: 'DatePickerCalendar',
   components: {
@@ -44,7 +45,7 @@ export default {
       type: Object,
       required: true
     },
-    unavailableDates: {
+    lockedDays: {
       type: Array,
       default: () => []
     },
@@ -67,15 +68,8 @@ export default {
       } = this.calendarSetup
       const monthArr = []
 
-      function monthDiff(dateFrom, dateTo) {
-        return (
-          dateTo.getMonth() -
-          dateFrom.getMonth() +
-          12 * (dateTo.getFullYear() - dateFrom.getFullYear())
-        )
-      }
-
-      const monthQty = monthDiff(new Date(firstMonth), new Date(lastMonth)) + 1
+      const monthQty =
+        getMonthDiff(new Date(firstMonth), new Date(lastMonth)) + 1
 
       for (let i = 0; i < monthQty; i++) {
         const baseMonth = new Date(firstMonth.valueOf())

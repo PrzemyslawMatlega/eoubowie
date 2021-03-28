@@ -5,7 +5,7 @@
     "votes": 123,
     "dateFrom": "2021-03-21",
     "dateTo": "2021-03-28",
-    "unavailableDates": [
+    "lockedDays": [
         "2021-03-29",
         "2021-03-30"
     ],

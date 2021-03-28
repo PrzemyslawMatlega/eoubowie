@@ -39,7 +39,7 @@
           :date-from="dateFrom"
           :date-to="dateTo"
           :calendar-setup="calendarSetup"
-          :unavailable-dates="unavailableDates"
+          :locked-days="lockedDays"
         />
       </transition>
     </div>
@@ -63,7 +63,7 @@ export default {
       type: Date,
       default: null
     },
-    unavailableDates: {
+    lockedDays: {
       type: Array,
       default: () => []
     },

@@ -15,7 +15,7 @@
         <DatePicker
           :date-from="formData.dateFrom"
           :date-to="formData.dateTo"
-          :unavailable-dates="unavailableDates"
+          :locked-days="lockedDays"
           :calendar-setup="calendarSetup"
         />
       </div>
@@ -26,6 +26,11 @@
 import BookingFormInfo from './BookingFormInfo'
 import DatePicker from './DatePicker'
 import { EventBus } from '@/utils/eventBus'
+import {
+  areDaysEqual,
+  convertToDateObject,
+  getDaysBetween
+} from '@/utils/dateFunctions'
 export default {
   name: 'BookingForm',
   components: {
@@ -58,7 +63,7 @@ export default {
       type: String,
       default: ''
     },
-    unavailableDates: {
+    lockedDays: {
       type: Array,
       default: () => []
     },
@@ -76,43 +81,20 @@ export default {
     }
   },
   created() {
-    function validateDateRange(from, to, unavailableDates) {
+    function validateDateRange(from, to, lockedDays) {
       let isValid = true
-      if (from === '' || to === '') return isValid
+      if (from === '' && to === '') return isValid
 
-      const dateArr = [from, to].map(el => {
-        if (typeof el === 'string') {
-          return new Date(el)
-        } else return el
-      })
+      const dateArr = [from, to].map(el => convertToDateObject(el))
+      const unavailableArr = lockedDays.map(el => convertToDateObject(el))
 
-      const unavailableArr = unavailableDates.map(el => {
-        if (typeof el === 'string') {
-          return new Date(el)
-        } else return el
-      })
-
-      function getDaysArr(start, end) {
-        let arr = []
-        for (
-          let dt = new Date(start);
-          dt <= end;
-          dt.setDate(dt.getDate() + 1)
-        ) {
-          arr.push(new Date(dt))
-        }
-        return arr
-      }
-
-      isValid = !getDaysArr(dateArr[0], dateArr[1]).some(day => {
-        return unavailableArr.some(
-          el => el.toDateString() === day.toDateString()
-        )
+      isValid = !getDaysBetween(dateArr[0], dateArr[1]).some(day => {
+        return unavailableArr.some(el => areDaysEqual(el, day))
       })
 
       return isValid
     }
-    if (validateDateRange(this.dateFrom, this.dateTo, this.unavailableDates)) {
+    if (validateDateRange(this.dateFrom, this.dateTo, this.lockedDays)) {
       this.formData.dateFrom = new Date(this.dateFrom)
       this.formData.dateTo = new Date(this.dateTo)
     }

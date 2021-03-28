@@ -25,6 +25,11 @@
 <script>
 import DatePickerDay from './DatePickerDay'
 import { EventBus } from '@/utils/eventBus'
+import {
+  areDaysEqual,
+  getDaysBetween,
+  convertToDateObject
+} from '@/utils/dateFunctions'
 export default {
   components: {
     DatePickerDay
@@ -34,7 +39,7 @@ export default {
       type: Date,
       required: true
     },
-    unavailableDates: {
+    lockedDays: {
       type: Array,
       default: () => []
     },
@@ -65,14 +70,14 @@ export default {
       }
       // @TODO
       // if (this.editMode === 'checkIn') {
-      //   this.parseUnavailableDates.some(el => {
+      //   this.convertlockedDays.some(el => {
       //     return el.toDateString() <= date.toDateString()
       //   })
       //     ? (isValid = false)
       //     : null
       // }
       // if (this.editMode === 'checkOut') {
-      //   this.parseUnavailableDates.some(el => {
+      //   this.convertlockedDays.some(el => {
       //     return el.toDateString() > date.toDateString()
       //   })
       //     ? (isValid = false)
@@ -86,44 +91,24 @@ export default {
       return {
         date,
         isCurrentMonth,
-        isToday: this.compareDates(this.today, date),
-        isUnavailable: this.parseUnavailableDates.some(el =>
-          this.compareDates(el, date)
+        isToday: areDaysEqual(this.today, date),
+        isUnavailable: this.convertlockedDays.some(el =>
+          areDaysEqual(el, date)
         ),
-        isDateFrom: this.compareDates(date, this.dateFrom),
-        isDateTo: this.compareDates(date, this.dateTo)
+        isDateFrom: areDaysEqual(date, this.dateFrom),
+        isDateTo: areDaysEqual(date, this.dateTo)
       }
-    },
-    convertToDate(date) {
-      if (typeof date !== 'string') return date
-      const dateArr = date.split('-')
-      return new Date(
-        parseInt(dateArr[2]),
-        parseInt(dateArr[1]) - 1,
-        parseInt(dateArr[0])
-      )
-    },
-    compareDates(firstDate, secondDate) {
-      if (firstDate === null || secondDate === null) return false
-      return firstDate.toDateString() === secondDate.toDateString()
-    },
-    getDaysArr(start, end) {
-      let arr = []
-      for (let dt = new Date(start); dt <= end; dt.setDate(dt.getDate() + 1)) {
-        arr.push(new Date(dt))
-      }
-      return arr
     },
     isDateBetween(dateBetween) {
       if (this.dateFrom === null || this.dateTo === null) return false
-      return this.getDaysArr(this.dateFrom, this.dateTo).some(el => {
-        return this.compareDates(dateBetween, el)
+      return getDaysBetween(this.dateFrom, this.dateTo).some(el => {
+        return areDaysEqual(dateBetween, el)
       })
     }
   },
   computed: {
-    parseUnavailableDates() {
-      return this.unavailableDates.map(el => new Date(el))
+    convertlockedDays() {
+      return this.lockedDays.map(el => convertToDateObject(el))
     },
     getDays() {
       const days = []
