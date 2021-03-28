@@ -1,5 +1,11 @@
 <template>
-  <div :class="$style.calendar">
+  <div
+    :class="[
+      $style.calendar,
+      { [$style.calendarCheckIn]: editMode === 'checkIn' },
+      { [$style.calendarCheckOut]: editMode === 'checkOut' }
+    ]"
+  >
     <DatePickerNav
       @prevMonth="prevMonth"
       @nextMonth="nextMonth"
@@ -100,6 +106,15 @@ export default {
       }
     }
   },
+  watch: {
+    editMode(value) {
+      if (value === 'checkIn' && this.dateFrom !== null) {
+        this.currentMonth = new Date(new Date(this.dateFrom).setDate(1))
+      } else if (value === 'checkOut' && this.dateTo !== null) {
+        this.currentMonth = new Date(new Date(this.dateTo).setDate(1))
+      }
+    }
+  },
   filters: {
     convertMonth(month) {
       const monthNames = [
@@ -129,8 +144,32 @@ export default {
 
 <style lang="scss" module>
 .calendar {
+  position: relative;
   width: 100%;
+  z-index: 5;
   background: #fff;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  &:before {
+    content: '';
+    position: absolute;
+    top: -0.7rem;
+    left: 2rem;
+    width: 2rem;
+    height: 2rem;
+    border: 0.1rem solid var(--alto);
+    transform: rotate(45deg);
+    transition: 0.5s left ease;
+    z-index: -1;
+  }
+}
+.calendarCheckIn {
+  &:before {
+    left: 2rem;
+  }
+}
+.calendarCheckOut {
+  &:before {
+    left: 24rem;
+  }
 }
 </style>

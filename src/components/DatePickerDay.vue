@@ -8,7 +8,9 @@
         [$style.dayUnavailable]: isUnavailable,
         [$style.dayFrom]: isDateFrom,
         [$style.dayTo]: isDateTo,
-        [$style.dayBetween]: isDateBetween
+        [$style.dayBetween]: isDateBetween,
+        [$style.daysPicked]: areDaysPicked,
+        [$style.lockedInRange]: lockedAnimation
       }
     ]"
     :style="{ transition: `${0.02 * index}s all ease` }"
@@ -20,6 +22,7 @@
 </template>
 
 <script>
+import { EventBus } from '@/utils/eventBus'
 export default {
   props: {
     isCurrentMonth: {
@@ -46,10 +49,29 @@ export default {
       type: Boolean,
       required: true
     },
+    areDaysPicked: {
+      type: Boolean,
+      required: true
+    },
     index: {
       type: Number,
       require: true
     }
+  },
+  data() {
+    return {
+      lockedAnimation: false
+    }
+  },
+  created() {
+    EventBus.$on('lockedInRange', () => {
+      if (this.isUnavailable) {
+        this.lockedAnimation = true
+        setTimeout(() => {
+          this.lockedAnimation = false
+        }, 500)
+      }
+    })
   }
 }
 </script>
@@ -80,6 +102,13 @@ export default {
 .dayUnavailable {
   color: var(--alto);
   cursor: not-allowed;
+  .inner {
+    @extend %flex-cc;
+    height: 4.5rem;
+    width: 4.5rem;
+    transition: 0.5s all ease;
+    border-radius: 50%;
+  }
 }
 .dayFrom,
 .dayTo {
@@ -93,21 +122,31 @@ export default {
     color: #fff;
   }
 }
-.dayFrom.dayTo {
-  background: transparent;
-}
 .dayBetween {
   color: var(--turquoise-blue);
   background: var(--french-pass);
 }
-.dayFrom {
+.daysPicked.dayFrom {
   background: linear-gradient(to left, var(--french-pass) 50%, transparent 50%);
 }
-.dayTo {
+.daysPicked.dayTo {
   background: linear-gradient(
     to right,
     var(--french-pass) 50%,
     transparent 50%
   );
+}
+.dayFrom.dayTo {
+  background: transparent;
+}
+.lockedInRange {
+  .inner {
+    @extend %flex-cc;
+    height: 4.5rem;
+    width: 4.5rem;
+    background: var(--gallery);
+    border-radius: 50%;
+    color: #fff;
+  }
 }
 </style>

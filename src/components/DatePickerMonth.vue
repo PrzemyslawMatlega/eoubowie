@@ -13,6 +13,7 @@
         :is-date-from="day.isDateFrom"
         :is-date-to="day.isDateTo"
         :is-date-between="isDateBetween(day.date)"
+        :are-days-picked="dateTo !== null && dateFrom !== null"
         :index="index"
         @click.native="dayClicked(day)"
       >
@@ -63,6 +64,38 @@ export default {
       today: new Date(new Date().setHours(0, 0, 0, 0))
     }
   },
+  computed: {
+    getDays() {
+      const days = []
+      const getCurrentMonthDays = () => {
+        const date = new Date(this.currentMonth)
+        date.setDate(1)
+        while (date.getMonth() === this.currentMonth.getMonth()) {
+          days.push(this.setDateAttr(new Date(date)))
+          date.setDate(date.getDate() + 1)
+        }
+      }
+      const getPrevMonthDays = firstDay => {
+        const date = new Date(firstDay)
+        while (date.getDay() > 0) {
+          date.setDate(date.getDate() - 1)
+          days.unshift(this.setDateAttr(new Date(date), false))
+        }
+      }
+      const getNextMonthDays = lastDay => {
+        const date = new Date(lastDay)
+        while (date.getDay() < 6) {
+          date.setDate(date.getDate() + 1)
+          days.push(this.setDateAttr(new Date(date), false))
+        }
+      }
+      getCurrentMonthDays()
+      getPrevMonthDays(days[0].date)
+      getNextMonthDays(days[days.length - 1].date)
+
+      return days
+    }
+  },
   methods: {
     dayClicked({ date, isUnavailable }) {
       let isValid = true
@@ -107,6 +140,7 @@ export default {
             this.lockedDays
           )
           if (lockedInRange) {
+            EventBus.$emit('lockedInRange')
             EventBus.$emit('dayClicked', {
               date,
               editMode: this.editMode,
@@ -122,6 +156,7 @@ export default {
           )
 
           if (lockedInRange) {
+            EventBus.$emit('lockedInRange')
             EventBus.$emit('dayClicked', {
               date,
               editMode: this.editMode,
@@ -151,38 +186,6 @@ export default {
         return areDaysEqual(dateBetween, el)
       })
     }
-  },
-  computed: {
-    getDays() {
-      const days = []
-      const getCurrentMonthDays = () => {
-        const date = new Date(this.currentMonth)
-        date.setDate(1)
-        while (date.getMonth() === this.currentMonth.getMonth()) {
-          days.push(this.setDateAttr(new Date(date)))
-          date.setDate(date.getDate() + 1)
-        }
-      }
-      const getPrevMonthDays = firstDay => {
-        const date = new Date(firstDay)
-        while (date.getDay() > 0) {
-          date.setDate(date.getDate() - 1)
-          days.unshift(this.setDateAttr(new Date(date), false))
-        }
-      }
-      const getNextMonthDays = lastDay => {
-        const date = new Date(lastDay)
-        while (date.getDay() < 6) {
-          date.setDate(date.getDate() + 1)
-          days.push(this.setDateAttr(new Date(date), false))
-        }
-      }
-      getCurrentMonthDays()
-      getPrevMonthDays(days[0].date)
-      getNextMonthDays(days[days.length - 1].date)
-
-      return days
-    }
   }
 }
 </script>
@@ -191,8 +194,7 @@ export default {
 .month {
   background: #fff;
 }
-.currentMonth {
-}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);

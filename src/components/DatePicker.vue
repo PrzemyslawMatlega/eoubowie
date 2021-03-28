@@ -1,5 +1,5 @@
 <template>
-  <div :class="$style.datePicker">
+  <div :class="$style.datePicker" id="date-picker">
     <div
       :class="[
         $style.dateTab,
@@ -32,7 +32,7 @@
       {{ dateTo === null ? 'Check out' : dateTo | parseToString }}
     </div>
     <div :class="$style.calendarWrapper">
-      <transition name="quick">
+      <transition name="fade">
         <DatePickerCalendar
           v-show="editMode"
           :edit-mode="editMode"
@@ -92,10 +92,16 @@ export default {
     EventBus.$on('dayClicked', data => {
       if (data.editMode === 'checkIn') {
         this.editMode = 'checkOut'
-      } else {
-        // this.editMode = ''
       }
-    })
+    }),
+      document.querySelector('body').addEventListener('click', el => {
+        const isOutside = !el.path.some(el => {
+          return el.id === 'date-picker'
+        })
+        if (isOutside) {
+          this.editMode = ''
+        }
+      })
   }
 }
 </script>
